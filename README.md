@@ -1,3 +1,6 @@
+## How to start the php server
+`php -S localhost:8008 -t api`
+
 ## Authorization
 The API in it's current state does not use API keys, but it might in the future.
 
@@ -49,7 +52,7 @@ Our API is using rate limiting to prevent request spam. Every servent ident can 
 
 ### `POST` Set Task
 Sets the task for a specific bot
-`POST https://domain/bots/settask.php`
+`POST https://domain/api/settask`
 
 |Name|Type|Format|Description|
 |----|----|------|-----------|
@@ -58,12 +61,12 @@ Sets the task for a specific bot
 
 ### `GET` Get Bot List
 Get a list of all bots currently connected.
-`GET https://domain/bots/bots.php`
+`GET https://domain/api/bots`
 
 ### `GET` Get Bot Tasks
 Get a list of all tasks currently being performed.
-`GET https://domain/bots/tasks.php`
+`GET https://domain/api/tasks`
 
 ### `GET` Get Bot Task
 Get a list of the task being performed by the selected bot.
-`GET https://domain/bots/task.php`
+`GET https://domain/api/task`

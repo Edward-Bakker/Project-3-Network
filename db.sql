@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `battlebots` (
     `insert_time`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `last_update`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    CONSTRAINT `PK_botid` PRIMARY KEY (`id`),
+    CONSTRAINT `PK_botid` PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------------------------------------
