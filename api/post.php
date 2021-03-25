@@ -21,6 +21,7 @@
                         case 'bots': $response = $this->getBots(); break;
                         case 'tasks': $response = $this->getTasks(); break;
                         case 'task': $response = $this->getTask(); break;
+                        case 'name': $response = $this->getName(); break;
                         default: $response = $this->notFoundResponse(); break;
                     }
                     break;
@@ -28,6 +29,7 @@
                     switch ($this->function)
                     {
                         case 'settask': $response = $this->setTask(); break;
+                        case 'setname': $response = $this->setName(); break;
                         default: $response = $this->notFoundResponse(); break;
                     }
                     break;
@@ -52,7 +54,7 @@
         private function getTasks()
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => ['bot1' => 'race', 'bot2' => 'maze'],'status' =>'true','message' => 'Request successful.']);
+            $response['body'] = json_encode(['data' => ['bot1' => 'race', 'bot2' => 'maze'],'status' => 'true','message' => 'Request successful.']);
             return $response;
         }
 
@@ -63,10 +65,24 @@
             return $response;
         }
 
+        private function getName()
+        {
+            $response['status_code_header'] = 'HTTP/1.1 200 OK';
+            $response['body'] = json_encode(['data' => ['name' => 'bot1']]);
+            return $response;
+        }
+
         private function setTask()
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => 'set task']);
+            $response['body'] = json_encode(['status' => 'true','message' => 'Task change successful.']);
+            return $response;
+        }
+
+        private function setName()
+        {
+            $response['status_code_header'] = 'HTTP/1.1 200 OK';
+            $response['body'] = json_encode(['status' => 'true','message' => 'Name change successful.']);
             return $response;
         }
 
