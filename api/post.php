@@ -47,7 +47,7 @@
         private function getBots()
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => 'bots']);
+            $response['body'] = json_encode(['data' => ['bot1' => ['name' => 'bot 1', 'task' => 'race', 'insert_time' => '1921', 'last_update' => '1938']],'status' => 'true','message' => 'Request successful.']);
             return $response;
         }
 
@@ -61,14 +61,14 @@
         private function getTask()
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => 'task']);
+            $response['body'] = json_encode(['data' => ['task' => 'race'],'status' => 'true','message' => 'Request successful.']);
             return $response;
         }
 
         private function getName()
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => ['name' => 'bot1']]);
+            $response['body'] = json_encode(['data' => ['name' => 'bot1'],'status' => 'true','message' => 'Request successful.']);
             return $response;
         }
 

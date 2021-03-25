@@ -59,6 +59,15 @@ Sets the task for a specific bot
 |Bot ID|String|*id*|Bot ID of the selected bot.|
 |Task|String|*task*|The new task for the selected bot.|
 
+### `POST` Set Name
+Sets the name for a specific bot
+`POST https://domain/api/setname`
+
+|Name|Type|Format|Description|
+|----|----|------|-----------|
+|Bot ID|String|*id*|Bot ID of the selected bot.|
+|Name|String|*name*|The new name for the selected bot.|
+
 ### `GET` Get Bot List
 Get a list of all bots currently connected.
 `GET https://domain/api/bots`
@@ -68,5 +77,9 @@ Get a list of all tasks currently being performed.
 `GET https://domain/api/tasks`
 
 ### `GET` Get Bot Task
-Get a list of the task being performed by the selected bot.
+Gets the task being performed by the selected bot.
+`GET https://domain/api/task`
+
+### `GET` Get Bot Name
+Gets the name of the selected bot
 `GET https://domain/api/task`
