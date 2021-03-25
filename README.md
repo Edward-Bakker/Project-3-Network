@@ -46,7 +46,7 @@ HTTP status codes give you information whether your request was successful or no
 
 
 ## Rate Limit
-Our API is using rate limiting to prevent request spam. Every servent ident can request 50 requests per minute and 5 requests per second.
+Our API is using rate limiting to prevent request spam. Every bot identity can request 60 requests per minute and 5 requests per second.
 
 ## Bot Management
 
