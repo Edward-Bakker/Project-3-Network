@@ -4,9 +4,9 @@
         private $requestMethod;
         private $function;
 
-        public function __construct($db, $requestMethod, $function)
+        public function __construct($requestMethod, $function)
         {
-            $this->db = $db;
+            $this->db = new Database();
             $this->requestMethod = $requestMethod;
             $this->function = $function;
         }
@@ -47,42 +47,75 @@
         private function getBots()
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => ['bot1' => ['name' => 'bot 1', 'task' => 'race', 'insert_time' => '1921', 'last_update' => '1938']],'status' => 'true','message' => 'Request successful.']);
+            $response['body'] = json_encode(['data' => ['bot1' => ['name' => 'bot 1', 'task' => 'race', 'insert_time' => '1921', 'last_update' => '1938']],'status' => true,'message' => 'Request successful.']);
             return $response;
         }
 
         private function getTasks()
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => ['bot1' => 'race', 'bot2' => 'maze'],'status' => 'true','message' => 'Request successful.']);
+            $response['body'] = json_encode(['data' => ['bot1' => 'race', 'bot2' => 'maze'],'status' => true,'message' => 'Request successful.']);
             return $response;
         }
 
         private function getTask()
         {
-            $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => ['task' => 'race'],'status' => 'true','message' => 'Request successful.']);
+            $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+            $query = "SELECT task FROM battlebots WHERE id = ?";
+            if($stmt = $this->db->prepare($query))
+            {
+                $stmt->bind_param('i', $id);
+
+                $stmt->execute();
+
+                $stmt->bind_result($task);
+
+                $stmt->store_result();
+
+                $result = null;
+                if($stmt->num_rows() === 1)
+                {
+                    while($stmt->fetch())
+                    {
+                        $result = $task;
+                    }
+                }
+
+                $stmt->close();
+            }
+            $this->db->close();
+
+            if($result !== null)
+            {
+                $response['status_code_header'] = 'HTTP/1.1 200 OK';
+                $response['body'] = json_encode(['data' => ['task' => $result],'status' => true,'message' => 'Request successful.']);
+            }
+            else
+            {
+                $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+                $response['body'] = json_encode(['status' => false,'message' => 'Request failed.']);
+            }
             return $response;
         }
 
         private function getName()
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => ['name' => 'bot1'],'status' => 'true','message' => 'Request successful.']);
+            $response['body'] = json_encode(['data' => ['name' => 'bot1'],'status' => true,'message' => 'Request successful.']);
             return $response;
         }
 
         private function setTask()
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['status' => 'true','message' => 'Task change successful.']);
+            $response['body'] = json_encode(['status' => true,'message' => 'Task change successful.']);
             return $response;
         }
 
         private function setName()
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['status' => 'true','message' => 'Name change successful.']);
+            $response['body'] = json_encode(['status' => true,'message' => 'Name change successful.']);
             return $response;
         }
 

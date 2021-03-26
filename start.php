@@ -16,5 +16,3 @@
         }
     }
     Start::register();
-    $database = new Database();
-    $dbConnection = $database->connect();

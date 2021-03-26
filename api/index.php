@@ -23,5 +23,5 @@
         $function = $uri[2];
     }
 
-    $controller = new Post($dbConnection, $requestMethod, $function);
+    $controller = new Post($requestMethod, $function);
     $controller->processRequest();

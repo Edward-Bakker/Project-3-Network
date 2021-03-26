@@ -82,4 +82,4 @@ Gets the task being performed by the selected bot.
 
 ### `GET` Get Bot Name
 Gets the name of the selected bot
-`GET https://domain/api/task`
+`GET https://domain/api/name`

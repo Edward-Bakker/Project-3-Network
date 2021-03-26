@@ -11,7 +11,8 @@
             $user = $config->db_user;
             $pass = $config->db_pass;
 
-            try {
+            try
+            {
                 $this->dbConnection = new mysqli($host, $user, $pass, $db);
             }
             catch(Exception $e)
