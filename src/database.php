@@ -24,4 +24,14 @@
         {
             return $this->dbConnection;
         }
+
+        public function prepare($query)
+        {
+            return $this->dbConnection->prepare($query);
+        }
+
+        public function close()
+        {
+            $this->dbConnection->close();
+        }
     }
