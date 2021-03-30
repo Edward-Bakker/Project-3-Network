@@ -46,8 +46,32 @@
 
         private function getBots()
         {
-            $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => ['bot1' => ['name' => 'bot 1', 'task' => 'race', 'insert_time' => '1921', 'last_update' => '1938']],'status' => true,'message' => 'Request successful.']);
+            $query = "SELECT * FROM battlebots";
+            if($stmt = $this->db->prepare($query))
+            {
+                $stmt->execute();
+
+                $result = $stmt->get_result();
+                    $responseEntry = array();
+                    while ($row = $result->fetch_assoc())
+                    {
+                        array_push($responseEntry, array($row['id']=>$row['name']));
+                    }
+                
+                        if($result !== null)
+                        {
+                        
+                            $response['status_code_header'] = 'HTTP/1.1 200 OK';
+                            $response['body'] = json_encode(['data' => [$responseEntry],'status' => true,'message' => 'Request successful.']);
+                        }
+                        else
+                        {
+                            $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+                            $response['body'] = json_encode(['status' => false,'message' => 'Request failed.']);
+                        }
+                    
+            }
+            $this->db->close();
             return $response;
         }
 
