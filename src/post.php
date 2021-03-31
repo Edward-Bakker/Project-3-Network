@@ -55,12 +55,12 @@
                     $responseEntry = array();
                     while ($row = $result->fetch_assoc())
                     {
-                        array_push($responseEntry, array($row['id']=>$row['name']));
+                        array_push($responseEntry, array($row['id']=>['name' => $row['name'], 'task' => $row['task'], 'insert_time' => $row['insert_time'], 'last_update' => $row['last_update']]));
                     }
-                
+
                         if($result !== null)
                         {
-                        
+
                             $response['status_code_header'] = 'HTTP/1.1 200 OK';
                             $response['body'] = json_encode(['data' => [$responseEntry],'status' => true,'message' => 'Request successful.']);
                         }
@@ -69,7 +69,7 @@
                             $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
                             $response['body'] = json_encode(['status' => false,'message' => 'Request failed.']);
                         }
-                    
+
             }
             $this->db->close();
             return $response;
