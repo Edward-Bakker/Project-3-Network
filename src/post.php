@@ -77,8 +77,31 @@
 
         private function getTasks()
         {
-            $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => ['bot1' => 'race', 'bot2' => 'maze'],'status' => true,'message' => 'Request successful.']);
+            $query = "SELECT * FROM battlebots";
+            if($stmt = $this->db->prepare($query))
+            {
+                $stmt->execute();
+
+                $result = $stmt->get_result();
+                $responseEntry = array();
+                while ($row = $result->fetch_assoc())
+                {
+                    array_push($responseEntry, array($row['name']=>$row['task']));
+                }
+                $stmt->close();
+
+                if($result !== null)
+                {
+                    $response['status_code_header'] = 'HTTP/1.1 200 OK';
+                    $response['body'] = json_encode(['data' => [$responseEntry],'status' => true,'message' => 'Request successful.']);
+                }
+                else
+                {
+                    $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+                    $response['body'] = json_encode(['status' => false,'message' => 'Request failed.']);
+                }
+            }
+            $this->db->close();
             return $response;
         }
 
@@ -124,9 +147,43 @@
 
         private function getName()
         {
-            $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => ['name' => 'bot1'],'status' => true,'message' => 'Request successful.']);
+            $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+            $query = "SELECT `name` FROM battlebots WHERE id = ?";
+            if($stmt = $this->db->prepare($query))
+            {
+                $stmt->bind_param('i', $id);
+
+                $stmt->execute();
+
+                $stmt->bind_result($name);
+
+                $stmt->store_result();
+
+                $result = null;
+                if($stmt->num_rows() === 1)
+                {
+                    while($stmt->fetch())
+                    {
+                        $result = $name;
+                    }
+                }
+
+                $stmt->close();
+            }
+            $this->db->close();
+
+            if($result !== null)
+            {
+                $response['status_code_header'] = 'HTTP/1.1 200 OK';
+                $response['body'] = json_encode(['data' => ['name' => $result],'status' => true,'message' => 'Request successful.']);
+            }
+            else
+            {
+                $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+                $response['body'] = json_encode(['status' => false,'message' => 'Request failed.']);
+            }
             return $response;
+
         }
 
         private function setTask()
