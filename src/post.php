@@ -22,6 +22,7 @@
                         case 'tasks': $response = $this->getTasks(); break;
                         case 'task': $response = $this->getTask(); break;
                         case 'name': $response = $this->getName(); break;
+                        case 'data': $response = $this->getData(); break;
                         default: $response = $this->notFoundResponse(); break;
                     }
                     break;
@@ -30,6 +31,7 @@
                     {
                         case 'settask': $response = $this->setTask(); break;
                         case 'setname': $response = $this->setName(); break;
+                        case 'setdata': $response = $this->setData(); break;
                         default: $response = $this->notFoundResponse(); break;
                     }
                     break;
@@ -55,7 +57,7 @@
                     $responseEntry = array();
                     while ($row = $result->fetch_assoc())
                     {
-                        array_push($responseEntry, array($row['id']=>['name' => $row['name'], 'task' => $row['task'], 'insert_time' => $row['insert_time'], 'last_update' => $row['last_update']]));
+                        array_push($responseEntry, array($row['id']=>['name' => $row['name'], 'task' => $row['task'], 'data' => $row['data'], 'insert_time' => $row['insert_time'], 'last_update' => $row['last_update']]));
                     }
 
                         if($result !== null)
@@ -183,7 +185,46 @@
                 $response['body'] = json_encode(['status' => false,'message' => 'Request failed.']);
             }
             return $response;
+        }
 
+        private function getData()
+        {
+            $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+            $query = "SELECT `data` FROM battlebots WHERE id = ?";
+            if($stmt = $this->db->prepare($query))
+            {
+                $stmt->bind_param('i', $id);
+
+                $stmt->execute();
+
+                $stmt->bind_result($data);
+
+                $stmt->store_result();
+
+                $result = null;
+                if($stmt->num_rows() === 1)
+                {
+                    while($stmt->fetch())
+                    {
+                        $result = $data;
+                    }
+                }
+
+                $stmt->close();
+            }
+            $this->db->close();
+
+            if($result !== null)
+            {
+                $response['status_code_header'] = 'HTTP/1.1 200 OK';
+                $response['body'] = json_encode(['data' => ['data' => $result],'status' => true,'message' => 'Request successful.']);
+            }
+            else
+            {
+                $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+                $response['body'] = json_encode(['status' => false,'message' => 'Request failed.']);
+            }
+            return $response;
         }
 
         private function setTask()
@@ -197,6 +238,13 @@
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
             $response['body'] = json_encode(['status' => true,'message' => 'Name change successful.']);
+            return $response;
+        }
+
+        private function setData()
+        {
+            $response['status_code_header'] = 'HTTP/1.1 200 OK';
+            $response['body'] = json_encode(['status' => true,'message' => 'Data change successful.']);
             return $response;
         }
 

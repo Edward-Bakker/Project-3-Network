@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `battlebots` (
     `id`                        INT NOT NULL AUTO_INCREMENT,
     `name`                      VARCHAR(64) NOT NULL,
     `task`                      VARCHAR(64) NOT NULL,
+    `data`                      VARCHAR(1024) NULL,
     `insert_time`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `last_update`               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
