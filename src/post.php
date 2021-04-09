@@ -229,22 +229,94 @@
 
         private function setTask()
         {
-            $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['status' => true,'message' => 'Task change successful.']);
+            $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+            $task = filter_input(INPUT_POST, 'task', FILTER_SANITIZE_STRING);
+            $result = false;
+            $query = "UPDATE battlebots SET task = ? WHERE id = ?";
+            if($stmt = $this->db->prepare($query))
+            {
+                $stmt->bind_param('si', $task, $id);
+
+                $stmt->execute();
+
+                $result = true;
+
+                $stmt->close();
+            }
+            $this->db->close();
+
+            if($result)
+            {
+                $response['status_code_header'] = 'HTTP/1.1 200 OK';
+                $response['body'] = json_encode(['data' => ['data' => $result],'status' => true,'message' => 'Task change successful.']);
+            }
+            else
+            {
+                $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+                $response['body'] = json_encode(['status' => false,'message' => 'Task change failed.']);
+            }
             return $response;
         }
 
         private function setName()
         {
-            $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['status' => true,'message' => 'Name change successful.']);
+            $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+            $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+            $result = false;
+            $query = "UPDATE battlebots SET name = ? WHERE id = ?";
+            if($stmt = $this->db->prepare($query))
+            {
+                $stmt->bind_param('si', $name, $id);
+
+                $stmt->execute();
+
+                $result = true;
+
+                $stmt->close();
+            }
+            $this->db->close();
+
+            if($result)
+            {
+                $response['status_code_header'] = 'HTTP/1.1 200 OK';
+                $response['body'] = json_encode(['status' => true,'message' => 'Name change successful.']);
+            }
+            else
+            {
+                $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+                $response['body'] = json_encode(['status' => false,'message' => 'Name change failed.']);
+            }
             return $response;
         }
 
         private function setData()
         {
-            $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['status' => true,'message' => 'Data change successful.']);
+            $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+            $data = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
+            $result = false;
+            $query = "UPDATE battlebots SET data = ? WHERE id = ?";
+            if($stmt = $this->db->prepare($query))
+            {
+                $stmt->bind_param('si', $data, $id);
+
+                $stmt->execute();
+
+                $result = true;
+
+                $stmt->close();
+            }
+            $this->db->close();
+
+            if($result)
+            {
+                $response['status_code_header'] = 'HTTP/1.1 200 OK';
+                $response['body'] = json_encode(['status' => true,'message' => 'Data change successful.']);
+            }
+            else
+            {
+                $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+                $response['body'] = json_encode(['status' => false,'message' => 'Data change failed.']);
+            }
             return $response;
         }
 
