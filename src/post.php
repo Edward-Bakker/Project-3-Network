@@ -346,7 +346,7 @@ class Post
     {
         $config = (object) parse_ini_file('../config.ini', true);
         $config_auth = (object) $config->authorization;
-        if($config_auth->enabled)
+        if ($config_auth->enabled)
         {
             $headers = array_change_key_case(getallheaders(), CASE_LOWER);
             if ($headers['pb-api-ident'] !== null || $headers['pb-api-secret'] !== null)
@@ -357,7 +357,7 @@ class Post
 
                 if ($authorization->getBotId() !== $botid)
                 {
-                    if(!$authorization->isAdmin())
+                    if (!$authorization->isAdmin())
                     {
                         header('HTTP/1.1 403 Forbidden');
                         exit();
