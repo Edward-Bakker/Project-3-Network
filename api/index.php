@@ -20,10 +20,12 @@ if (isset($uri[1]))
 $controller = new Post($requestMethod, $function);
 
 $config = (object) parse_ini_file('../config.ini', true);
-if ($config->authorization)
+$config_auth = (object) $config->authorization;
+$config_ratelimit = (object) $config->ratelimit;
+if ($config_auth->enabled)
 {
     $headers = array_change_key_case(getallheaders(), CASE_LOWER);
-    if ($headers['pb-api-ident'] !== null || $headers['pb-api-secret'] !== null)
+    if (isset($headers['pb-api-ident']) && isset($headers['pb-api-secret']))
     {
         $id = (int) $headers['pb-api-ident'];
         $secret = $headers['pb-api-secret'];
@@ -31,7 +33,7 @@ if ($config->authorization)
         $ratelimiting = new Ratelimiting($id);
         if ($authorization->Authenticate())
         {
-            if ($config->ratelimit)
+            if ($config_ratelimit->enabled)
             {
                 $ratelimiting->rateLimit();
             }

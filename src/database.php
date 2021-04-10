@@ -5,11 +5,12 @@ class Database
 
     public function __construct()
     {
-        $config = (object) parse_ini_file('../config.ini', true);
-        $host = $config->database->db_host;
-        $db = $config->database->db_name;
-        $user = $config->database->db_user;
-        $pass = $config->database->db_pass;
+        $ini = (object) parse_ini_file('../config.ini', true);
+        $config = (object) $ini->database;
+        $host = $config->db_host;
+        $db = $config->db_name;
+        $user = $config->db_user;
+        $pass = $config->db_pass;
 
         try
         {
@@ -28,7 +29,11 @@ class Database
 
     public function prepare($query)
     {
-        return $this->dbConnection->prepare($query);
+        $prepare = $this->dbConnection->prepare($query);
+        if($prepare !== false)
+            return $prepare;
+        else
+            exit('Error during prepare');
     }
 
     public function close()

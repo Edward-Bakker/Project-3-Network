@@ -93,7 +93,6 @@ class Post
                 $response['body'] = json_encode(['status' => false, 'message' => 'Request failed.']);
             }
         }
-        $this->db->close();
         return $response;
     }
 
@@ -123,7 +122,6 @@ class Post
                 $response['body'] = json_encode(['status' => false, 'message' => 'Request failed.']);
             }
         }
-        $this->db->close();
         return $response;
     }
 
@@ -152,7 +150,6 @@ class Post
 
             $stmt->close();
         }
-        $this->db->close();
 
         if ($result !== null)
         {
@@ -192,7 +189,6 @@ class Post
 
             $stmt->close();
         }
-        $this->db->close();
 
         if ($result !== null)
         {
@@ -232,7 +228,6 @@ class Post
 
             $stmt->close();
         }
-        $this->db->close();
 
         if ($result !== null)
         {
@@ -251,7 +246,7 @@ class Post
     {
         $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
         $task = filter_input(INPUT_POST, 'task', FILTER_SANITIZE_STRING);
-        $this->Authorize($id);
+        $this->Authorize((int) $id);
         $result = false;
         $query = "UPDATE battlebots SET task = ? WHERE id = ?";
         if ($stmt = $this->db->prepare($query))
@@ -264,7 +259,6 @@ class Post
 
             $stmt->close();
         }
-        $this->db->close();
 
         if ($result)
         {
@@ -283,7 +277,7 @@ class Post
     {
         $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $this->Authorize($id);
+        $this->Authorize((int) $id);
         $result = false;
         $query = "UPDATE battlebots SET name = ? WHERE id = ?";
         if ($stmt = $this->db->prepare($query))
@@ -296,7 +290,6 @@ class Post
 
             $stmt->close();
         }
-        $this->db->close();
 
         if ($result)
         {
@@ -315,7 +308,7 @@ class Post
     {
         $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
         $data = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
-        $this->Authorize($id);
+        $this->Authorize((int) $id);
         $result = false;
         $query = "UPDATE battlebots SET data = ? WHERE id = ?";
         if ($stmt = $this->db->prepare($query))
@@ -328,7 +321,6 @@ class Post
 
             $stmt->close();
         }
-        $this->db->close();
 
         if ($result)
         {
@@ -353,7 +345,8 @@ class Post
     private function Authorize($botid)
     {
         $config = (object) parse_ini_file('../config.ini', true);
-        if($config->authorization->enabled)
+        $config_auth = (object) $config->authorization;
+        if($config_auth->enabled)
         {
             $headers = array_change_key_case(getallheaders(), CASE_LOWER);
             if ($headers['pb-api-ident'] !== null || $headers['pb-api-secret'] !== null)
@@ -361,22 +354,16 @@ class Post
                 $id = (int) $headers['pb-api-ident'];
                 $secret = $headers['pb-api-secret'];
                 $authorization = new Authorization($id, $secret);
-                if ($authorization->getBotId() === $botid)
-                {
-                    return true;
-                }
-                else
+
+                if ($authorization->getBotId() !== $botid)
                 {
                     if(!$authorization->isAdmin())
                     {
                         header('HTTP/1.1 403 Forbidden');
-                        return false;
-                        die();
+                        exit();
                     }
-                    return true;
                 }
             }
         }
-        return true;
     }
 }

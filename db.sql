@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `ratelimit` (
     `last_update`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT `PK_ratelimitid` PRIMARY KEY (`id`),
+    UNIQUE KEY `unique_keyid` (`keyid`),
     CONSTRAINT `FK_keyid` FOREIGN KEY `FK_keyid` (`keyid`)
         REFERENCES `apikeys` (`id`)
         ON UPDATE CASCADE ON DELETE CASCADE

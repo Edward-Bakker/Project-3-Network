@@ -35,7 +35,6 @@ class Authorization
             }
             $stmt->close();
         }
-        $this->db->close();
 
         if ($result !== null)
         {
@@ -70,7 +69,6 @@ class Authorization
             }
             $stmt->close();
         }
-        $this->db->close();
         return $result;
     }
 
@@ -97,7 +95,6 @@ class Authorization
             }
             $stmt->close();
         }
-        $this->db->close();
 
         if ($result !== null)
         {

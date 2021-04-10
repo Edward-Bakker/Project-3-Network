@@ -9,7 +9,7 @@ class Ratelimiting
     {
         $this->db = new Database();
         $config = (object) parse_ini_file('../config.ini', true);
-        $this->config = $config->ratelimit;
+        $this->config = (object) $config->ratelimit;
         $this->id = $id;
     }
 
@@ -36,14 +36,13 @@ class Ratelimiting
             }
             $stmt->close();
         }
-        $this->db->close();
 
         return $result;
     }
 
     public function setLastConnect()
     {
-        $query = "UPDATE ratelimit SET last_update = UNIX_TIMESTAMP() WHERE keyid = ?";
+        $query = "UPDATE ratelimit SET last_update = NOW() WHERE keyid = ?";
         if ($stmt = $this->db->prepare($query))
         {
             $stmt->bind_param('i', $this->id);
@@ -52,12 +51,11 @@ class Ratelimiting
 
             $stmt->close();
         }
-        $this->db->close();
     }
 
     public function createRatelimit()
     {
-        $query = "INSERT INTO ratelimit (`keyid`) VALUES (?)";
+        $query = "INSERT INTO ratelimit (keyid) VALUES (?)";
         if ($stmt = $this->db->prepare($query))
         {
             $stmt->bind_param('i', $this->id);
@@ -66,7 +64,6 @@ class Ratelimiting
 
             $stmt->close();
         }
-        $this->db->close();
     }
 
     public function rateLimit()
@@ -74,17 +71,22 @@ class Ratelimiting
         $delaySeconds = $this->config->delay_s;
         if ($this->getLastConnect() === null)
         {
-            $this->createRatelimit;
+            $this->createRatelimit();
         }
         else
         {
-            $lastConnection = strtotime($this->getLastConnect());
-            $date = time();
+            date_default_timezone_set('Europe/Amsterdam');
+            $date = strtotime(date("Y-m-d H:i:s"));
+            $lastConnection = strtotime($this->getLastConnect(), $date);
 
             if (($date - $lastConnection) < $delaySeconds)
             {
                 header('HTTP/1.1 429 Request Overflow');
                 die();
+            }
+            else
+            {
+                $this->setLastConnect();
             }
         }
     }
