@@ -79,7 +79,7 @@
 
         private function getTasks()
         {
-            $query = "SELECT * FROM battlebots";
+            $query = "SELECT id, task FROM battlebots";
             if($stmt = $this->db->prepare($query))
             {
                 $stmt->execute();
@@ -88,7 +88,7 @@
                 $responseEntry = array();
                 while ($row = $result->fetch_assoc())
                 {
-                    array_push($responseEntry, array($row['name']=>$row['task']));
+                    array_push($responseEntry, array($row['id']=>$row['task']));
                 }
                 $stmt->close();
 
