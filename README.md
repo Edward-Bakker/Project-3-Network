@@ -2,11 +2,20 @@
 `php -S localhost:8008 -t api`
 
 ## Authorization
-The API in it's current state does not use API keys, but it might in the future.
+You can obtain your API keys from the network group.
 
 This API is a RESTful API with industry standard HTTP requests and JSON responses.
 
+This feature is disabled by default.
+
 ## Requests
+In order to use our API you need to provide a ident `PB-API-IDENT` and the matching secret key `PB-API-SECRET` as HTTP-Headers in your request. (Disabled by default)
+
+|Name|Type|Format|Description|
+|----|----|------|-----------|
+|API Ident|String|*pb-api-ident*|Public identification key|
+|API Secret|String|*pb-api-secret*|Private identification key|
+
 Any request body data needs to be in a `JSON ENCODED` data array as shown down below.
 
 ```javascript
@@ -46,7 +55,9 @@ HTTP status codes give you information whether your request was successful or no
 
 
 ## Rate Limit
-Our API is using rate limiting to prevent request spam. Every bot identity can request 60 requests per minute and 5 requests per second.
+Our API supports using rate limiting to prevent request spam. Every identity can send 1 request per second by default (editable in the config).
+
+This feature is disabled by default.
 
 ## Bot Management
 
