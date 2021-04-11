@@ -81,7 +81,7 @@ Sets the name for a specific bot
 
 ### `POST` Set Data
 Sets the data for a specific bot
-`POST https://api.samklop.xyz/setname`
+`POST https://api.samklop.xyz/setdata`
 
 |Name|Type|Format|Description|
 |----|----|------|-----------|
