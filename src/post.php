@@ -104,10 +104,10 @@ class Post
             $stmt->execute();
 
             $result = $stmt->get_result();
-            $responseEntry = array();
+            $responseEntry = [];
             while ($row = $result->fetch_assoc())
             {
-                array_push($responseEntry, array($row['id'] => $row['task']));
+                $responseEntry += [(String) $row['id'] => $row['task']];
             }
             $stmt->close();
 
