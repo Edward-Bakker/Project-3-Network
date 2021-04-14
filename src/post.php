@@ -263,7 +263,7 @@ class Post
         if ($result)
         {
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
-            $response['body'] = json_encode(['data' => ['data' => $result], 'status' => true, 'message' => 'Task change successful.']);
+            $response['body'] = json_encode(['status' => true, 'message' => 'Task change successful.']);
         }
         else
         {
