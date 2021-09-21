@@ -78,7 +78,7 @@ class Post
             $responseEntry = array();
             while ($row = $result->fetch_assoc())
             {
-                array_push($responseEntry, array($row['id'] => ['name' => $row['name'], 'task' => $row['task'], 'data' => $row['data'], 'insert_time' => $row['insert_time'], 'last_update' => $row['last_update']]));
+                array_push($responseEntry, array(['name' => $row['name'], 'task' => $row['task'], 'data' => $row['data'], 'insert_time' => $row['insert_time'], 'last_update' => $row['last_update']]));
             }
 
             if ($result !== null)
